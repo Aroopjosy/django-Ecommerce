@@ -1,0 +1,63 @@
+{% extends 'base/base.html' %}
+
+{% block maincontent %}
+
+
+<div class="container">
+	<div class="table-responsive text-nowrap">
+	<table class="table">
+		<caption>List of users</caption>
+		<thead>
+		  <tr>
+			<th scope="col">NO:</th>
+			<th scope="col">Product</th>
+			<th scope="col">Price</th>
+			<th scope="col">Quantity</th>
+			<th scope="col">Total Item Price</th>
+		  </tr>
+		</thead>
+		<tbody>
+			{% for orderproduct in cart %}
+		  <tr>
+			<th scope="row">{{forloop.counter}}</th>
+			<td>{{orderproduct.product.title}}</td>
+			<td>
+				{% if orderproduct.product.discount_price %}
+				<span class="mr-1">
+					<del>${{orderproduct.product.price}}</del>
+				  </span>
+				  <span>${{orderproduct.product.discount_price}}</span>
+				  {% else %}
+				  <span>${{orderproduct.product.price}}</span>
+				  {% endif %}
+			</td>
+			<td>
+				<a href="{% url 'products:remove-single' orderproduct.product.slug %}">
+				<i class="fas fa-minus mr-2" ></i></a>
+				{{orderproduct.quantity}}
+			<a href="{% url 'products:add-single' orderproduct.product.slug %}"><i class="fas fa-plus ml-2"></i></a>
+			</td>
+			<td><b>{{orderproduct.get_final_price}}</b></td>
+		  </tr>
+		  {% empty %}
+		  <tr>
+			  <td colspan="5"> You dont have no active orders</td>
+		  </tr>
+		{% endfor %}
+		<tr>
+			<td colspan="4"><strong class="float-right">Total Amount</strong></td>
+			<td><strong>{{object.get_total}}</strong></td>
+		</tr>
+		<tr>
+			<td colspan="5" ><a href="/" class="btn btn-secondary float-right"> continue to shoppig</a>
+				<a href="{% url 'order:checkout' %}" class="btn btn-warning float-right mr-2"> Checkout process</a>
+			
+			</td>
+		</tr>
+		</tbody>
+	  </table>
+	
+</div>
+</div>
+
+{% endblock maincontent %}
